@@ -1,6 +1,9 @@
 package com.codecool.jpaexample.model;
 
+import com.sun.istack.internal.NotNull;
+
 import javax.persistence.*;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +18,7 @@ public class Student {
 
     private String name;
 
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Temporal(TemporalType.DATE)
