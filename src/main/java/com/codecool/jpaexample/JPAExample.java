@@ -10,6 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JPAExample {
 
@@ -48,8 +50,21 @@ public class JPAExample {
     }
 
     public static void main(String[] args) {
+        // using environment variables for persistence.xml !
+        Map<String, String> env = System.getenv();
+        Map<String, Object> configOverrides = new HashMap<String, Object>();
+        for (String envName : env.keySet()) {
+            if (envName.contains("USER")) {
+                configOverrides.put("javax.persistence.jdbc.user", env.get(envName));
+            }
+            if (envName.contains("PASSWORD")) {
+                configOverrides.put("javax.persistence.jdbc.password", env.get(envName));
+            }
+        }
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpaexamplePU");
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("jpaexamplePU", configOverrides);
+
         EntityManager em = emf.createEntityManager();
 
         populateDb(em);
