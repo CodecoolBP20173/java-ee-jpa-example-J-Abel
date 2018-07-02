@@ -1,9 +1,6 @@
 package com.codecool.jpaexample.model;
 
-import com.sun.istack.internal.NotNull;
-
 import javax.persistence.*;
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,10 +21,19 @@ public class Student {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
+    @Transient
     private long age;
 
     @OneToOne
     private Address address;
+
+    @ElementCollection
+//    @Column(name = "phone")
+    private List<String> phoneNumbers = new ArrayList<>();
+
+    public Student(List<String> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
 
     public Student() {
     }
