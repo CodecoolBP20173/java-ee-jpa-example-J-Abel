@@ -1,6 +1,7 @@
 package com.codecool.jpaexample;
 
 import com.codecool.jpaexample.model.Address;
+import com.codecool.jpaexample.model.CCLocation;
 import com.codecool.jpaexample.model.Klass;
 import com.codecool.jpaexample.model.Student;
 
@@ -25,25 +26,40 @@ public class JPAExample {
             e.printStackTrace();
         }
 
-        Klass classBp2 = new Klass("Budapest 2016-2");
-        Address address = new Address("Hungary", "1234", "Budapest", "Macskakő út 5.");
-        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address, Arrays.asList("1111", "222222"));
-        classBp2.addStudent(student);
-
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
-        em.persist(address);
+
+        Klass classBp2 = new Klass("Budapest 2016-2", CCLocation.BUDAPEST);
+        Address address = new Address("Hungary", "1234", "Budapest", "Macskakő út 5.");
+        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address, Arrays.asList("1111", "222222"));
+
         em.persist(student);
+        address.setStudent(student);
+
+        em.persist(classBp2);
+        classBp2.addStudent(student);
+        student.setKlass(classBp2);
+
+        em.persist(student);
+        em.persist(address);
+
         transaction.commit();
         System.out.println("Ödön saved.");
 
         Address address2 = new Address("Hungary", "6789", "Budapest", "Harap u. 3.");
-        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address, Arrays.asList("1111", "222222"));
+        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address2, Arrays.asList("1111", "222222"));
+
+        em.persist(student2);
+        address2.setStudent(student2);
+        em.persist(address2);
+
         classBp2.addStudent(student2);
+        em.persist(classBp2);
+        student2.setKlass(classBp2);
+
+        em.persist(student2);
 
         transaction.begin();
-        em.persist(student2);
-        em.persist(address2);
         transaction.commit();
         System.out.println("Aladár saved.");
     }

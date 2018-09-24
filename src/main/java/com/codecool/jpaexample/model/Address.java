@@ -11,14 +11,6 @@ public class Address {
 
     private String country;
 
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
     @Column(length = 4, name = "Zip")
     private String zipcode;
 
@@ -26,7 +18,7 @@ public class Address {
 
     private String addr;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne
     private Student student;
 
 
@@ -43,6 +35,15 @@ public class Address {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @OneToOne(mappedBy = "address")
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public String getCountry() {

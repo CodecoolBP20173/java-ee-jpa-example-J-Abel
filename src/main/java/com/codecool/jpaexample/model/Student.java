@@ -31,6 +31,9 @@ public class Student {
     @CollectionTable(name = "Phone")
     private List<String> phoneNumbers = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Klass klass;
+
 
     public Student() {
     }
@@ -105,7 +108,6 @@ public class Student {
     public void setPhoneNumbers(List<String> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
     }
-
     @Override
     public String toString() {
         return "Student{" +
@@ -116,4 +118,25 @@ public class Student {
                 '}';
     }
 
+    public Klass getKlass() {
+        return klass;
+    }
+
+    public void setKlass(Klass klass) {
+        this.klass = klass;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Student)) return false;
+        if (object == null) return false;
+        if (!this.getClass().equals(object.getClass())) return false;
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (id + name).hashCode();
+    }
 }

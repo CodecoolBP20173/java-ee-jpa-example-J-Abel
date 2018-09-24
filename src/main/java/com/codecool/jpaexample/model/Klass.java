@@ -3,22 +3,27 @@ package com.codecool.jpaexample.model;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity(name = "Class")
 public class Klass {
-    private CCLocation miskolc = null;
-    private CCLocation budapest = null;
-    private CCLocation krakow = null;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Enumerated(value = EnumType.STRING)
+    private CCLocation location = null;
+
     private String name;
+
+    @OneToMany(
+            mappedBy = "klass",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<Student> students = new HashSet<>();
 
-    public Klass(CCLocation miskolc, CCLocation budapest, CCLocation krakow) {
-        this.miskolc = miskolc;
-        this.budapest = budapest;
-        this.krakow = krakow;
-    }
-
-    public Klass(String name) {
+    public Klass(String name, CCLocation location) {
         this.name = name;
+        this.location = location;
     }
 
     public Klass() {
@@ -32,23 +37,32 @@ public class Klass {
         this.name = name;
     }
 
-    @OneToMany
     public Set<Student> getStudents() {
         return students;
     }
 
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
     public void addStudent(Student student) {
+//        student.setKlass(this);
         students.add(student);
     }
 
-    private String id;
-
-    @Id
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public CCLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(CCLocation location) {
+        this.location = location;
     }
 }
