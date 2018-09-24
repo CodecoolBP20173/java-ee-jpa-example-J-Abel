@@ -1,6 +1,8 @@
 package com.codecool.jpaexample;
 
-import com.codecool.jpaexample.model.*;
+import com.codecool.jpaexample.model.Address;
+import com.codecool.jpaexample.model.Klass;
+import com.codecool.jpaexample.model.Student;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,10 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class JPAExample {
 
@@ -28,7 +27,7 @@ public class JPAExample {
 
         Klass classBp2 = new Klass("Budapest 2016-2");
         Address address = new Address("Hungary", "1234", "Budapest", "Macskakő út 5.");
-        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address);
+        Student student = new Student("Ödön", "odon@tokodon.hu", birthDate1, address, Arrays.asList("1111", "222222"));
         classBp2.addStudent(student);
 
         EntityTransaction transaction = em.getTransaction();
@@ -39,7 +38,7 @@ public class JPAExample {
         System.out.println("Ödön saved.");
 
         Address address2 = new Address("Hungary", "6789", "Budapest", "Harap u. 3.");
-        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address);
+        Student student2 = new Student("Aladár", "ktyfl@gmail.com", birthDate2, address, Arrays.asList("1111", "222222"));
         classBp2.addStudent(student2);
 
         transaction.begin();
@@ -50,21 +49,10 @@ public class JPAExample {
     }
 
     public static void main(String[] args) {
-        // using environment variables for persistence.xml !
-        Map<String, String> env = System.getenv();
-        Map<String, Object> configOverrides = new HashMap<String, Object>();
-        for (String envName : env.keySet()) {
-            if (envName.contains("USER")) {
-                configOverrides.put("javax.persistence.jdbc.user", env.get(envName));
-            }
-            if (envName.contains("PASSWORD")) {
-                configOverrides.put("javax.persistence.jdbc.password", env.get(envName));
-            }
-        }
+        Map<String, Object> configOverrides = usingEnvironVars();
 
         EntityManagerFactory emf =
                 Persistence.createEntityManagerFactory("jpaexamplePU", configOverrides);
-
         EntityManager em = emf.createEntityManager();
 
         populateDb(em);
@@ -90,5 +78,22 @@ public class JPAExample {
         em.close();
         emf.close();
 
+    }
+
+    /**
+     * using environment variables for persistence.xml !
+     */
+    private static Map<String, Object> usingEnvironVars() {
+        Map<String, String> env = System.getenv();
+        Map<String, Object> configOverrides = new HashMap<String, Object>();
+        for (String envName : env.keySet()) {
+            if (envName.contains("USER")) {
+                configOverrides.put("javax.persistence.jdbc.user", env.get(envName));
+            }
+            if (envName.contains("PASSWORD")) {
+                configOverrides.put("javax.persistence.jdbc.password", env.get(envName));
+            }
+        }
+        return configOverrides;
     }
 }

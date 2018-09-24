@@ -11,8 +11,15 @@ public class Address {
 
     private String country;
 
-//    @Column(length = 4, name = "Zip")
-    @Column(length = 4)
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    @Column(length = 4, name = "Zip")
     private String zipcode;
 
     private String city;
@@ -22,8 +29,6 @@ public class Address {
     @OneToOne(mappedBy = "address")
     private Student student;
 
-    public Address() {
-    }
 
     public Address(String country, String zipcode, String city, String addr) {
         this.country = country;
